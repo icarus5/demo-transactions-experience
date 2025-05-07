@@ -29,8 +29,23 @@ type Mutation {
 
 type Query {
   getAllUsers: [User!]!
+  signIn(login: SignIn!): SignInResponse!
   transactionById(id: String!): Transaction!
   userById(id: String!): User!
+  userInfo(user: String!): UserInfo!
+}
+
+input SignIn {
+  password: String
+  username: String
+}
+
+type SignInResponse {
+  access_token: String
+  expires_in: String
+  id_token: String
+  refresh_token: String
+  token_type: String
 }
 
 type Transaction {
@@ -58,4 +73,11 @@ type User {
   isActive: Boolean
   name: String
   updatedAt: CustomDateTime!
+}
+
+type UserInfo {
+  document: String
+  fullName: String
+  oid_azure_b2c: String
+  sub: String
 }

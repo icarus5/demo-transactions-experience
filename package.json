@@ -30,7 +30,9 @@
     "@nestjs/platform-express": "^11.0.1",
     "apollo-server-express": "^3.13.0",
     "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
     "graphql": "^16.11.0",
+    "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
