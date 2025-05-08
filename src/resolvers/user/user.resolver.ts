@@ -1,8 +1,11 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { User } from '../../commons/dto/transaction.dto';
+import { User } from 'src/commons/dto/transaction.dto';
 import { UserService } from '../../services/user';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { SignIn, SignInResponse, UserInfo } from 'src/commons/dto/singin.dto';
+
+import { UseInterceptors } from '@nestjs/common';
+import { JwtAuthInterceptor } from '../../commons/util/jwt.expiration.interceptor';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -14,6 +17,7 @@ export class UserResolver {
   }
 
   @Query(() => User, { name: 'userById' })
+  @UseInterceptors(new JwtAuthInterceptor())
   getUserById(@Args('id', { type: () => String }) id: string): Observable<User> {
     const user = this.userService.getUserById(id).pipe(
       map((response: User) => response),
@@ -44,6 +48,7 @@ export class UserResolver {
   }
 
   @Query(() => UserInfo, { name: 'userInfo' })
+  @UseInterceptors(new JwtAuthInterceptor())
   userInfo(@Args('user', { type: () => String }) token: string): Observable<UserInfo> {
     const signIn = this.userService.getUserInfo(token).pipe(
       map((response: UserInfo) => response),
