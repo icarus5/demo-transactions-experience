@@ -46,4 +46,7 @@ export class UserInfo {
   document: string;
   @Field({ nullable: true })
   fullName?: string; // El apellido es opcional ya que podría no estar siempre presente
+
+  @Field({ nullable: true })
+  userId: string;
 }

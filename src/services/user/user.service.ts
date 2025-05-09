@@ -27,6 +27,18 @@ export class UserService {
     );
   }
 
+  getUserByDocument(document: string): Observable<User> {
+    return this.httpService.get<User>(`${this.apiUrl}/users/document/${document}`).pipe(
+      map((response: AxiosResponse<User>) => response.data),
+      catchError((error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          console.error('Error fetching users:', error.message);
+        }
+        return throwError(() => new Error('Error retrieving users'));
+      }),
+    );
+  }
+
   // Add more methods as needed
   getAllUsers(): User[] {
     return []; // Replace with actual logic to fetch all users
@@ -116,6 +128,7 @@ export class UserService {
         sub: decodedToken.sub,
         document: decodedToken.name,
         fullName: decodedToken.family_name,
+        userId: '',
       };
     } catch (error) {
       console.error('Error al procesar el ID token:', error);

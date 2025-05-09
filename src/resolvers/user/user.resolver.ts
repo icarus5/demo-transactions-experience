@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { User } from 'src/commons/dto/transaction.dto';
 import { UserService } from '../../services/user';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { SignIn, SignInResponse, UserInfo } from 'src/commons/dto/singin.dto';
 
 import { UseInterceptors } from '@nestjs/common';
@@ -51,7 +51,16 @@ export class UserResolver {
   @UseInterceptors(new JwtAuthInterceptor())
   userInfo(@Args('user', { type: () => String }) token: string): Observable<UserInfo> {
     const signIn = this.userService.getUserInfo(token).pipe(
-      map((response: UserInfo) => response),
+      switchMap((response: UserInfo) => {
+        return this.userService.getUserByDocument(response.document).pipe(
+          map((user: User) => {
+            return {
+              ...response,
+              userId: user.id,
+            };
+          }),
+        );
+      }),
       catchError((error: unknown) => {
         console.error('Error signing in:', error);
         return throwError(() => new Error('Error signing in'));

@@ -31,6 +31,7 @@ type Query {
   getAllUsers: [User!]!
   signIn(login: SignIn!): SignInResponse!
   transactionById(id: String!): Transaction!
+  transactionByUser(userId: String!): Transaction!
   userById(id: String!): User!
   userInfo(user: String!): UserInfo!
 }
@@ -68,6 +69,7 @@ type Transaction {
 
 type User {
   createdAt: CustomDateTime!
+  document: String
   email: String
   id: String
   isActive: Boolean
@@ -80,4 +82,5 @@ type UserInfo {
   fullName: String
   oid_azure_b2c: String
   sub: String
+  userId: String
 }

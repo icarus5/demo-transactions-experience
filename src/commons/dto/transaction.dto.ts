@@ -20,6 +20,9 @@ export class User {
 
   @Field(() => DateTimeScalar)
   updatedAt: Date;
+
+  @Field({ nullable: true })
+  document: string;
 }
 
 @ObjectType()

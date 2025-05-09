@@ -30,6 +30,18 @@ export class TransactionService {
     );
   }
 
+  getTransactionByUserId(id: string): Observable<Transaction> {
+    return this.httpService.get<Transaction>(`${this.apiUrl}/transactions/user/${id}`).pipe(
+      map((response: AxiosResponse<Transaction>) => response.data),
+      catchError((error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          console.error('Error fetching transaction:', error.message);
+        }
+        return throwError(() => new Error('Error retrieving transaction'));
+      }),
+    );
+  }
+
   async saveTransaction(transaction: CreateTransactionInput): Promise<Transaction> {
     const transactionData = { ...transaction, createUser: 'admin', createdAt: new Date() };
     const response = await axios.post<Transaction>(`${this.apiUrl}/transactions`, transactionData);

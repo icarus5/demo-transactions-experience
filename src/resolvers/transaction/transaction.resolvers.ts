@@ -46,6 +46,27 @@ export class TransactionResolvers {
     );
   }
 
+  @Query(() => Transaction, { name: 'transactionByUser' })
+  getTransactionByUser(@Args('userId', { type: () => String }) id: string): Observable<Transaction> {
+    return this.transactionService.getTransactionById(id).pipe(
+      switchMap((resp) => {
+        console.log('transactionById', JSON.stringify(resp));
+        return this.userService.getUserById(resp.userId).pipe(
+          map((user) => {
+            resp.user = user;
+            return {
+              ...resp,
+              fecha: resp.fecha ? new Date(resp.fecha) : null,
+              createdAt: resp.createdAt ? new Date(resp.createdAt) : null,
+              updatedAt: resp.updatedAt ? new Date(resp.updatedAt) : null,
+              user: resp.user ?? null,
+            };
+          }),
+        );
+      }),
+    );
+  }
+
   @Mutation(() => Transaction, { name: 'createTransaction' })
   async saveTransaction(@Args('input') input: CreateTransactionInput) {
     console.log(JSON.stringify(input));
