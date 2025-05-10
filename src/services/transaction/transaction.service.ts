@@ -30,9 +30,9 @@ export class TransactionService {
     );
   }
 
-  getTransactionByUserId(id: string): Observable<Transaction> {
-    return this.httpService.get<Transaction>(`${this.apiUrl}/transactions/user/${id}`).pipe(
-      map((response: AxiosResponse<Transaction>) => response.data),
+  getTransactionByUserId(id: string): Observable<Transaction[]> {
+    return this.httpService.get<Transaction[]>(`${this.apiUrl}/transactions/user/${id}`).pipe(
+      map((response: AxiosResponse<Transaction[]>) => response.data),
       catchError((error: unknown) => {
         if (axios.isAxiosError(error)) {
           console.error('Error fetching transaction:', error.message);

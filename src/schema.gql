@@ -31,7 +31,8 @@ type Query {
   getAllUsers: [User!]!
   signIn(login: SignIn!): SignInResponse!
   transactionById(id: String!): Transaction!
-  transactionByUser(userId: String!): Transaction!
+  transactionByUser(userId: String!): [Transaction!]!
+  transactionByUser2Metodo(userId: String!): [Transaction!]!
   userById(id: String!): User!
   userInfo(user: String!): UserInfo!
 }
